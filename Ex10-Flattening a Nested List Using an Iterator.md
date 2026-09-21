@@ -1,25 +1,153 @@
 # Flattening a Nested List Using an Iterator
-## DATE:
+## DATE: 07.07.2026
 ## AIM:
 To design and implement a class NestedIterator that flattens a nested list of integers such that all integers can be accessed sequentially using an iterator interface (next() and hasNext()).
 ## Algorithm
-1. 
-2. 
-3. 
-4.  
-5.   
+1. Define flattenList(nestedList) to convert the nested structure into a single list of integers.
+2. Traverse every NestedInteger item in the given list.
+3. For each item, Check whether the item contains a single integer using isInteger().
+4.  If the item is an integer. Get the integer using getInteger(). Add it to the integers list.
+5. Otherwise, the item contains another nested list, Get that list using getList(). Recursively call flattenList() on that list.
 
 ## Program:
 ```
 /*
 Program to find Flattening a Nested List Using an Iterator
-Developed by: 
-RegisterNumber:  
+Developed by: Ashqar Ahamed S T
+RegisterNumber: 212224240018
 */
+
+import java.util.*;
+public class NestedIterator implements Iterator<Integer> {
+    private List<Integer> integers = new ArrayList<>();
+    private int position = 0;
+
+    public NestedIterator(List<NestedInteger> nestedList) {
+        flattenList(nestedList);
+    }
+
+    private void flattenList(List<NestedInteger> nestedList) {
+        //Type your code here
+        for(NestedInteger item : nestedList)
+        {
+            if(item.isInteger())
+            {
+                integers.add(item.getInteger());
+            }
+            else
+            {
+                flattenList(item.getList());
+            }
+        }
+        
+        
+    }
+
+    @Override
+    public Integer next() {
+        //Type your code here
+        return integers.get(position++);
+        
+    }
+    @Override
+    public boolean hasNext() {
+        //Type your code here
+        return position < integers.size();
+        
+    }
+    public static List<NestedInteger> parse(String s) {
+    Stack<List<NestedInteger>> stack = new Stack<>();
+    List<NestedInteger> curr = new ArrayList<>();
+    int num = 0;
+    boolean hasNum = false;
+
+    for (int i = 0; i < s.length(); i++) {
+        char c = s.charAt(i);
+        if (c == '[') {
+            stack.push(curr);
+            curr = new ArrayList<>();
+        } else if (c == ']') {
+            if (hasNum) {
+                curr.add(new SimpleNestedInteger(num));
+                hasNum = false;
+                num = 0;
+            }
+            List<NestedInteger> completed = curr;
+            curr = stack.pop();
+            curr.add(new SimpleNestedInteger(completed));
+        } else if (c == ',') {
+            if (hasNum) {
+                curr.add(new SimpleNestedInteger(num));
+                hasNum = false;
+                num = 0;
+            }
+        } else if (Character.isDigit(c)) {
+            num = num * 10 + (c - '0');
+            hasNum = true;
+        }
+    }
+    return curr;
+}
+
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+      
+        String input = sc.nextLine();
+
+        List<NestedInteger> nestedList = parse(input);
+
+        NestedIterator iterator = new NestedIterator(nestedList);
+        List<Integer> output = new ArrayList<>();
+        while (iterator.hasNext()) {
+            output.add(iterator.next());
+        }
+
+        System.out.println(output);
+    }
+}
+
+interface NestedInteger {
+    boolean isInteger();
+    Integer getInteger();
+    List<NestedInteger> getList();
+}
+
+class SimpleNestedInteger implements NestedInteger {
+    private Integer value;
+    private List<NestedInteger> list;
+
+    public SimpleNestedInteger(Integer value) {
+        this.value = value;
+        this.list = null;
+    }
+
+    public SimpleNestedInteger(List<NestedInteger> list) {
+        this.list = list;
+        this.value = null;
+    }
+
+    @Override
+    public boolean isInteger() {
+        return value != null;
+    }
+
+    @Override
+    public Integer getInteger() {
+        return value;
+    }
+
+    @Override
+    public List<NestedInteger> getList() {
+        return list;
+    }
+}
+
 ```
 
 ## Output:
 
+<img width="782" height="180" alt="output Day5" src="https://github.com/user-attachments/assets/06b3b018-a4ea-45a8-8e24-87f19513784d" />
 
 
 ## Result:
