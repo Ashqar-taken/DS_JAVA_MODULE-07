@@ -1,5 +1,5 @@
 # Ex6 Right Rotation LinkedList
-## DATE: 30.08.2026
+## DATE: 30.07.2026
 
 ## AIM:
 
